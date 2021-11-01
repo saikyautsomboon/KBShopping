@@ -1,7 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:kbshopping/state/%20register_service.dart';
+import 'package:kbshopping/state/register_service.dart';
 import 'package:kbshopping/state/auth.dart';
 import 'package:kbshopping/state/buyer_service.dart';
 import 'package:kbshopping/state/rider_service.dart';
@@ -28,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: MyConstant.appName,
       routes: map,
       initialRoute: initialRoute,
