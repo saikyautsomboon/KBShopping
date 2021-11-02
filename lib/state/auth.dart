@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kbshopping/utility/my_constant.dart';
 import 'package:kbshopping/widget/show_image.dart';
 import 'package:kbshopping/widget/show_title.dart';
@@ -12,12 +13,14 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   bool observeText = true;
+  
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
     return Scaffold(
       body: GestureDetector(
         onTap: () {
+          // keyboard တက်လာတဲ့ချိန်မှာ အောက်ပြန်ဆင်းအောင်လုပ်ပေးတာ
           FocusScope.of(context).requestFocus(FocusNode());
         },
         behavior: HitTestBehavior.opaque,
@@ -29,9 +32,28 @@ class _AuthState extends State<Auth> {
             buildEmail(size),
             buildPassword(size),
             buildLogin(size),
+            buildCreateAccount(),
           ],
         )),
       ),
+    );
+  }
+
+  Row buildCreateAccount() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ShowTitle(
+          title: 'No Account ?',
+          textStyle: MyConstant().h3style(),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, MyConstant.routeRegister);
+          },
+          child: Text('Create Account'),
+        ),
+      ],
     );
   }
 
@@ -40,7 +62,7 @@ class _AuthState extends State<Auth> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: size * 0.04),
+          padding: EdgeInsets.symmetric(vertical: 14),
           width: size * 0.7,
           child: ElevatedButton(
             style: MyConstant().mybuttonStyle(),
@@ -57,9 +79,10 @@ class _AuthState extends State<Auth> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: EdgeInsets.only(top: size * 0.06),
+          padding: EdgeInsets.only(top: 17),
           width: size * 0.7,
           child: TextFormField(
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.account_circle_rounded,
@@ -86,7 +109,7 @@ class _AuthState extends State<Auth> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          padding: EdgeInsets.only(top: size * 0.05),
+          padding: EdgeInsets.only(top: 16),
           width: size * 0.7,
           child: TextFormField(
             obscureText: observeText,
