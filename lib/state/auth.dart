@@ -13,7 +13,7 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   bool observeText = true;
-  
+
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
@@ -25,15 +25,17 @@ class _AuthState extends State<Auth> {
         },
         behavior: HitTestBehavior.opaque,
         child: SafeArea(
-            child: ListView(
-          children: [
-            buildimage(size),
-            buildAppname(),
-            buildEmail(size),
-            buildPassword(size),
-            buildLogin(size),
-            buildCreateAccount(),
-          ],
+            child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildimage(size),
+              buildAppname(),
+              buildEmail(size),
+              buildPassword(size),
+              buildLogin(size),
+              buildCreateAccount(),
+            ],
+          ),
         )),
       ),
     );

@@ -40,4 +40,34 @@ class MyDialog {
       ),
     );
   }
+
+  Future<Null> simpleDialop(
+      BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: ListTile(
+          leading: ShowImage(
+            path: MyConstant.image2,
+          ),
+          title: ShowTitle(
+            title: title,
+            textStyle: MyConstant().h2style(),
+          ),
+          subtitle: ShowTitle(
+            title: message,
+            textStyle: MyConstant().h3style(),
+          ),
+        ),
+        children: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 }

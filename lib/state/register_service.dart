@@ -21,12 +21,13 @@ class _RegisterState extends State<Register> {
   String typeUser;
   bool observeText = true;
   File file; // ပုံထည့်ဖို့တွက်
-  double lat, lng;
+  double lat, lng; //5.11.21
+  final formkey = GlobalKey<FormState>(); //6.11.21
 
   @override
   void initState() {
     super.initState();
-    checkLocation();
+    checkLocation(); //5.11.21
   }
 
   @override
@@ -37,34 +38,63 @@ class _RegisterState extends State<Register> {
         title: Text('Create Account'),
         backgroundColor: MyConstant.primary,
       ),
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.all(size * 0.04),
-          children: [
-            buildtitle('ขอมูลทั้วไป'),
-            buildName(size),
-            buildtitle('ชนิดของ User'),
-            buildUser(size, 'ผู่ซื้อ (Buyer)', 'Buyer'),
-            buildUser(size, 'ผู่ขาย (Seller)', 'Seller'),
-            buildUser(size, 'ผู่ส่ง (Driver)', 'Driver'),
-            buildtitle('ขัอมูลพื้นฐาน'),
-            buildAddress(size),
-            buildPhone(size),
-            buildEmail(size),
-            buildPassword(size),
-            buildtitle('รูปภาพ'),
-            buildSubtitle(),
-            // buildSeller(size),
-            // buildDriver(size),
-            buildAvatar(size),
-            buildtitle('Map Location'),
-            buildMap(),
-          ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        behavior: HitTestBehavior.opaque,
+        child: Form(
+          key: formkey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                buildtitle('ขอมูลทั้วไป'),
+                buildName(size),
+                buildtitle('ชนิดของ User'),
+                buildUser(size, 'ผู่ซื้อ (Buyer)', 'Buyer'),
+                buildUser(size, 'ผู่ขาย (Seller)', 'Seller'),
+                buildUser(size, 'ผู่ส่ง (Driver)', 'Driver'),
+                buildtitle('ขัอมูลพื้นฐาน'),
+                buildAddress(size),
+                buildPhone(size),
+                buildEmail(size),
+                buildPassword(size),
+                buildtitle('Photo'),
+                buildAvatar(size),
+                buildtitle('Map Location'),
+                buildMap(),
+                buildRegister(size),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
+  Container buildRegister(double size) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 14),
+      width: size * 0.7,
+      child: ElevatedButton(
+        style: MyConstant().mybuttonStyle(),
+        onPressed: () {
+          if (formkey.currentState.validate()) {
+            if (typeUser == null) {
+              print('NO Choose Type User');
+              MyDialog().simpleDialop(
+                  context, 'No Choose User', 'Please Choose Type of User');
+            } else {
+              print('Your is $typeUser');
+            }
+          }
+        },
+        child: Text('Register'),
+      ),
+    );
+  }
+
+//5.11.21
   Future<Null> checkLocation() async {
     bool locationservice;
 
@@ -96,6 +126,7 @@ class _RegisterState extends State<Register> {
     }
   }
 
+//5.11.21
   Future<Null> findlatlao() async {
     print('work');
     Position position = await findlocation();
@@ -106,6 +137,7 @@ class _RegisterState extends State<Register> {
     });
   }
 
+//5.11.21
   Set<Marker> setMarker() => <Marker>[
         Marker(
           markerId: MarkerId('Id'),
@@ -116,9 +148,10 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ].toSet();
-
+//5.11.21
   Container buildMap() {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
       width: double.infinity,
       height: 300,
       child: Center(
@@ -136,6 +169,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
+//5.11.21
   Future<Position> findlocation() async {
     Position position;
     try {
@@ -159,38 +193,41 @@ class _RegisterState extends State<Register> {
     } catch (e) {}
   }
 
-  Row buildAvatar(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        IconButton(
-          icon: Icon(
-            Icons.photo_camera,
-            size: 30,
+  Padding buildAvatar(double size) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          IconButton(
+            icon: Icon(
+              Icons.photo_camera,
+              size: 30,
+            ),
+            onPressed: () {
+              chooseImage(ImageSource.camera);
+            },
           ),
-          onPressed: () {
-            chooseImage(ImageSource.camera);
-          },
-        ),
-        Container(
-          width: size * 0.4,
-          child: file == null
-              ? ShowImage(
-                  path: MyConstant.avatar,
-                )
-              : Image.file(file),
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.photo,
-            size: 30,
+          Container(
+            width: size * 0.4,
+            child: file == null
+                ? ShowImage(
+                    path: MyConstant.avatar,
+                  )
+                : Image.file(file),
           ),
-          onPressed: () {
-            chooseImage(ImageSource.gallery);
-          },
-        ),
-      ],
+          IconButton(
+            icon: Icon(
+              Icons.photo,
+              size: 30,
+            ),
+            onPressed: () {
+              chooseImage(ImageSource.gallery);
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -276,17 +313,6 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Container buildSubtitle() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: ShowTitle(
-        title:
-            'เป็นรูปภาพ ที่แสดงความเป็นตัวตนของ User(แต่ถ้าไม่ สะดวกแชร์ เราจะแสดงภาพ default แทน)',
-        textStyle: MyConstant().h3style(),
-      ),
-    );
-  }
-
   Row buildName(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -295,6 +321,12 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            // ignore: missing_return
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please Enter Your Name';
+              } else {}
+            },
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.perm_identity,
@@ -324,6 +356,12 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            // ignore: missing_return
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please Enter Your Address';
+              } else {}
+            },
             maxLines: 4,
             decoration: InputDecoration(
               prefixIcon: Padding(
@@ -357,6 +395,12 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            // ignore: missing_return
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please Enter Your Email';
+              } else {}
+            },
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               prefixIcon: Icon(
@@ -387,6 +431,12 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            // ignore: missing_return
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please Enter Your Phone';
+              } else {}
+            },
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               prefixIcon: Icon(
@@ -417,6 +467,12 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            // ignore: missing_return
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please Enter Your Password';
+              } else {}
+            },
             obscureText: observeText,
             decoration: InputDecoration(
               prefixIcon: Icon(
