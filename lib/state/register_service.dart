@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,7 @@ class _RegisterState extends State<Register> {
   File file; // ပုံထည့်ဖို့တွက်
   double lat, lng; //5.11.21
   final formkey = GlobalKey<FormState>(); //6.11.21
+  String avatar = ''; // 10.11.21
   //9.11.21
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -113,9 +115,38 @@ class _RegisterState extends State<Register> {
         'Name =$name, Address=$address, Phone=$phone, Email=$email, Password=$password');
     String path =
         '${MyConstant.domain}/kbshopping/getUserWhereUser.php?isAdd=true&email=$email';
-    await Dio().get(path).then((value) {
+    await Dio().get(path).then((value) async {
       print('Value ==>> $value');
+      if (value.toString() == 'null') {
+        //10.11.21
+        print('Can Use this Email');
+        if (file == null) {
+          processInsertMySQL();
+        } else {
+          print('## Upload Photo');
+          String apiSaveAvatar =
+              '${MyConstant.domain}/kbshopping/saveAvatar.php';
+          int i = Random().nextInt(1000000);
+          String nameAvatar = 'avatar$i.jpg';
+          Map<String, dynamic> map = Map();
+          //post type saveAvatar ကနေFile ပို့လာလိမ့်မယ်
+          map['file'] =
+              await MultipartFile.fromFile(file.path, filename: nameAvatar);
+          FormData data = FormData.fromMap(map);
+          await Dio().post(apiSaveAvatar, data: data).then((value) {
+            avatar = '/kbshopping/avatar/$nameAvatar';
+            processInsertMySQL();
+          });
+        }
+      } else {
+        MyDialog().simpleDialop(
+            context, 'Email already Exists', 'Please Enter New Email');
+      }
     });
+  }
+
+  Future<Null> processInsertMySQL() async {
+    print('Work $avatar');
   }
 
 //5.11.21
