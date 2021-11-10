@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kbshopping/utility/my_constant.dart';
@@ -23,6 +24,12 @@ class _RegisterState extends State<Register> {
   File file; // ပုံထည့်ဖို့တွက်
   double lat, lng; //5.11.21
   final formkey = GlobalKey<FormState>(); //6.11.21
+  //9.11.21
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -86,12 +93,29 @@ class _RegisterState extends State<Register> {
                   context, 'No Choose User', 'Please Choose Type of User');
             } else {
               print('Your is $typeUser');
+              uploadPictureAndInserDatatoServer();
             }
           }
         },
         child: Text('Register'),
       ),
     );
+  }
+
+  Future<Null> uploadPictureAndInserDatatoServer() async {
+    String name = nameController.text;
+    String address = addressController.text;
+    String phone = phoneController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
+
+    print(
+        'Name =$name, Address=$address, Phone=$phone, Email=$email, Password=$password');
+    String path =
+        '${MyConstant.domain}/kbshopping/getUserWhereUser.php?isAdd=true&email=$email';
+    await Dio().get(path).then((value) {
+      print('Value ==>> $value');
+    });
   }
 
 //5.11.21
@@ -321,6 +345,7 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            controller: nameController,
             // ignore: missing_return
             validator: (value) {
               if (value.isEmpty) {
@@ -356,6 +381,7 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            controller: addressController,
             // ignore: missing_return
             validator: (value) {
               if (value.isEmpty) {
@@ -395,6 +421,7 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            controller: emailController,
             // ignore: missing_return
             validator: (value) {
               if (value.isEmpty) {
@@ -431,6 +458,7 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            controller: phoneController,
             // ignore: missing_return
             validator: (value) {
               if (value.isEmpty) {
@@ -467,6 +495,7 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.symmetric(vertical: 15),
           width: size * 0.7,
           child: TextFormField(
+            controller: passwordController,
             // ignore: missing_return
             validator: (value) {
               if (value.isEmpty) {
