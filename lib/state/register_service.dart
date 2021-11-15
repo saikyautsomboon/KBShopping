@@ -121,7 +121,15 @@ class _RegisterState extends State<Register> {
         //10.11.21
         print('Can Use this Email');
         if (file == null) {
-          processInsertMySQL();
+          print('Avatar is Empty');
+          processInsertMySQL(
+            name: name,
+            usertype: typeUser,
+            address: address,
+            phone: phone,
+            email: email,
+            password: password,
+          );
         } else {
           print('## Upload Photo');
           String apiSaveAvatar =
@@ -133,10 +141,19 @@ class _RegisterState extends State<Register> {
           map['file'] =
               await MultipartFile.fromFile(file.path, filename: nameAvatar);
           FormData data = FormData.fromMap(map);
-          await Dio().post(apiSaveAvatar, data: data).then((value) {
-            avatar = '/kbshopping/avatar/$nameAvatar';
-            processInsertMySQL();
-          });
+          await Dio().post(apiSaveAvatar, data: data).then(
+            (value) {
+              avatar = '/kbshopping/avatar/$nameAvatar';
+              processInsertMySQL(
+                name: name,
+                usertype: typeUser,
+                address: address,
+                phone: phone,
+                email: email,
+                password: password,
+              );
+            },
+          );
         }
       } else {
         MyDialog().simpleDialop(
@@ -145,8 +162,27 @@ class _RegisterState extends State<Register> {
     });
   }
 
-  Future<Null> processInsertMySQL() async {
+  Future<Null> processInsertMySQL({
+    String name,
+    String usertype,
+    String address,
+    String phone,
+    String email,
+    String password,
+  }) async {
     print('Work $avatar');
+    String apiInsertUser =
+        '${MyConstant.domain}/kbshopping/insertData.php?Add=true&name=$name&usertype=$usertype&address=$address &phone=$phone&email=$email&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
+    await Dio().get(apiInsertUser).then(
+      (value) {
+        if (value.toString() == 'true') {
+          Navigator.pop(context);
+        } else {
+          MyDialog()
+              .simpleDialop(context, 'Register Fail!', 'Please Try Again');
+        }
+      },
+    );
   }
 
 //5.11.21
@@ -183,7 +219,6 @@ class _RegisterState extends State<Register> {
 
 //5.11.21
   Future<Null> findlatlao() async {
-    print('work');
     Position position = await findlocation();
     setState(() {
       lat = position.latitude;
@@ -193,16 +228,16 @@ class _RegisterState extends State<Register> {
   }
 
 //5.11.21
-  Set<Marker> setMarker() => <Marker>[
-        Marker(
-          markerId: MarkerId('Id'),
-          position: LatLng(lat, lng),
-          infoWindow: InfoWindow(
-            title: 'Your Locaiton',
-            snippet: 'Lat $lat , Lng $lng',
-          ),
-        ),
-      ].toSet();
+  Future<Position> findlocation() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
+    }
+  }
+
 //5.11.21
   Container buildMap() {
     return Container(
@@ -224,16 +259,17 @@ class _RegisterState extends State<Register> {
     );
   }
 
-//5.11.21
-  Future<Position> findlocation() async {
-    Position position;
-    try {
-      position = await Geolocator.getCurrentPosition();
-      return position;
-    } catch (e) {
-      return null;
-    }
-  }
+  //5.11.21
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('Id'),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(
+            title: 'Your Locaiton',
+            snippet: 'Lat $lat , Lng $lng',
+          ),
+        ),
+      ].toSet();
 
   Future<Null> chooseImage(ImageSource source) async {
     try {

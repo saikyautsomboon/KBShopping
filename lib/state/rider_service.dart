@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kbshopping/widget/show_logout.dart';
 
 class Rider extends StatefulWidget {
   // const Rider({ Key? key }) : super(key: key);
@@ -10,6 +11,13 @@ class Rider extends StatefulWidget {
 class _RiderState extends State<Rider> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Rider Page'),
+      ),
+      drawer: Drawer(
+        child: ShowLogout(),
+      ),
+    );
   }
 }
