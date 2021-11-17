@@ -20,7 +20,7 @@ Future<Null> main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // main Future ကို ပြီးအောင်လုပ်ပြီးမှအောက်ကိုဆက်သွားမယ်
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  String usertype = preferences.getString('usertype'); //getString('key')dfs
+  String usertype = preferences.getString('usertype'); //getString('key')
   if (usertype?.isEmpty ?? true) {
     print('## UserType ==>> $usertype');
     initialRoute = MyConstant.routeAuth;

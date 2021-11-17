@@ -209,7 +209,7 @@ class _AuthState extends State<Auth> {
                   });
                 },
               ),
-              hintText: 'Enter Your Password',
+              hintText: 'Password',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.dark),
