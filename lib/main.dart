@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kbshopping/body/Seller/add_product.dart';
 import 'package:kbshopping/state/register_service.dart';
 import 'package:kbshopping/state/auth.dart';
 import 'package:kbshopping/state/buyer_service.dart';
@@ -13,6 +14,7 @@ final Map<String, WidgetBuilder> map = {
   '/buyer': (BuildContext context) => Buyer(),
   '/rider': (BuildContext context) => Rider(),
   '/saler': (BuildContext context) => Saler(),
+  '/addproduct': (BuildContext context) => AddProduct(),
 };
 
 String initialRoute;
@@ -49,11 +51,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor materialColor =
+        MaterialColor(0xfff48fb1, MyConstant.mapMaterialColor);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: MyConstant.appName,
       routes: map,
       initialRoute: initialRoute,
+      theme: ThemeData(primarySwatch: materialColor),
     );
   }
 }

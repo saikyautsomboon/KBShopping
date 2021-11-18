@@ -42,6 +42,12 @@ class _SalerState extends State<Saler> {
         ),
       ),
       body: widgets[indexWidget],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, MyConstant.routeAddProduct);
+        },
+        child: Text('Add'),
+      ),
     );
   }
 
