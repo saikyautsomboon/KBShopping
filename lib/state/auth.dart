@@ -170,6 +170,10 @@ class _AuthState extends State<Auth> {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -217,6 +221,10 @@ class _AuthState extends State<Auth> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
               ),
             ),
           ),

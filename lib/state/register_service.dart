@@ -433,6 +433,10 @@ class _RegisterState extends State<Register> {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -473,6 +477,10 @@ class _RegisterState extends State<Register> {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -510,6 +518,10 @@ class _RegisterState extends State<Register> {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
               ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
+              ),
             ),
           ),
         ),
@@ -546,6 +558,10 @@ class _RegisterState extends State<Register> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
               ),
             ),
           ),
@@ -593,6 +609,10 @@ class _RegisterState extends State<Register> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(color: MyConstant.primary),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+                borderSide: BorderSide(color: Colors.red),
               ),
             ),
           ),
